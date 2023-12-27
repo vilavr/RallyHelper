@@ -5,8 +5,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!Solution Items", "!Solution Items", "{845FEC14-61E1-47F3-B7E8-A5DDE12D90D6}"
 	ProjectSection(SolutionItems) = preProject
 		..\.gitignore = ..\.gitignore
-		..\..\cardgameuno\Directory.Build.props = ..\..\cardgameuno\Directory.Build.props
 		..\..\cardgameuno\README.md = ..\..\cardgameuno\README.md
+		..\Directory.Build.Props = ..\Directory.Build.Props
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{1F79B339-298E-4860-B49B-C1724F56A1C3}"
