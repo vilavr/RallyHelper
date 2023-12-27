@@ -1,4 +1,4 @@
-# Uno Game
+# Rally Helper
 
 
 ## Student Information
