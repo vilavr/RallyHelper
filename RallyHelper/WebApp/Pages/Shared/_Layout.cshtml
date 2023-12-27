@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    bool isAdmin = Context.Session.GetString("IsAdmin") == "true";
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -18,15 +22,25 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                    </li>
-                </ul>
-            </div>
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                        </li>
+                        @if (isAdmin)
+                        {
+                            <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-page="/AdminPages/RallyManagement">Rally Management</a></li>
+                            <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-page="/Items/Index">Repair Items Management</a></li>
+                            <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-page="/Jobs/Index">Jobs Management</a></li>
+                            <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-page="/AdminPages/RallyReport">Rally Reports</a></li>
+                            <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-page="/AdminPages/Logout">Logout</a></li>
+                        }
+                        else
+                        {
+                            <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-page="/Jobs/Create">Place an Order</a></li>
+                            <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-page="/Jobs/Index">Check Orders</a></li>
+                        }
+                    </ul>
+                </div>
         </div>
     </nav>
 </header>

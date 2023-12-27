@@ -13,8 +13,7 @@ public class Rally
     [Required]
     public DateTime StartTime { get; set; }
 
-    [Required]
-    public DateTime EndTime { get; set; }
+    public DateTime? EndTime { get; set; } // Make EndTime nullable
 
     // Navigation property
     public virtual ICollection<Job> Jobs { get; set; }

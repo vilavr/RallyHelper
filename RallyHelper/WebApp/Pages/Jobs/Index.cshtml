@@ -2,47 +2,52 @@
 @model WebApp.Pages.Jobs.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Jobs";
 }
 
-<h1>Index</h1>
+<h1>Jobs</h1>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Job[0].TotalPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Job[0].StartTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Job[0].EndTime)
-            </th>
-            <th></th>
+            <th>Client Name</th>
+            <th>Total Price</th>
+            <th>Status</th>
+            <th>Item Details</th>
+            @if (Model.IsAdmin)
+            {
+                <th>Actions</th>
+            }
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Job) {
+    @foreach (var job in Model.Job)
+    {
         <tr>
+            <td>@job.ClientName</td>
+            <td>@job.TotalPrice.ToString()</td>
             <td>
-                @Html.DisplayFor(modelItem => item.TotalPrice)
+                @{
+                    var status = job.EndTime != null ? "Closed" :
+                                 job.StartTime != null ? "Active" : "Suspended";
+                }
+                @status
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StartTime)
+                @foreach (var item in job.JobItems)
+                {
+                    <p>@item.Item.ItemName - Qty: @item.NeededQuantity, Category: @item.Item.Category.CategoryName, Location: @item.Item.Location.LocationName</p>
+                }
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndTime)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+            @if (Model.IsAdmin && status == "Active")
+            {
+                <td>
+                    <form method="post" asp-page-handler="MarkAsClosed" asp-route-jobId="@job.Id">
+                        <button type="submit" class="btn btn-primary">Mark as Closed</button>
+                    </form>
+                </td>
+            }
         </tr>
-}
+    }
     </tbody>
 </table>

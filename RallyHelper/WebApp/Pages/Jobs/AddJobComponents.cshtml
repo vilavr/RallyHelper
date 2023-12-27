@@ -1,0 +1,86 @@
+@page
+@model WebApp.Pages.Jobs.AddJobComponents
+
+@{
+    ViewData["Title"] = "Add Job Components";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<h2>Adding Job Components</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label for="selectedItemName">Item Name</label>
+        <select asp-for="SelectedItemName" asp-items="Model.ItemNameOptions" class="form-control">
+            <option value="">-- Select Item --</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="selectedCategoryId">Category</label>
+        <select asp-for="SelectedCategoryId" asp-items="Model.CategoryOptions" class="form-control">
+            <option value="">-- Select Category --</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="selectedLocationId">Location</label>
+        <select asp-for="SelectedLocationId" asp-items="Model.LocationOptions" class="form-control">
+            <option value="">-- Select Location --</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="neededQuantity">Needed Quantity</label>
+        <input type="number" asp-for="NeededQuantity" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Search</button>
+        <button type="submit" class="btn btn-secondary" asp-page-handler="ClearFilters">Clear Filters</button>
+    </div>
+</form>
+
+@if (Model.FilteredItems != null && Model.FilteredItems.Any())
+{
+    <table class="table mt-4">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Location</th>
+            <th>Available Quantity</th>
+            <th>Price per item</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.FilteredItems)
+        {
+            <tr>
+                <td>@item.ItemName</td>
+                <td>@item.Category.CategoryName</td>
+                <td>@item.Location.LocationName</td> 
+                <td>@item.CurrentQuantity</td>
+                <td>@item.PricePerItem</td>
+                <td>
+                    <a asp-page="/Jobs/AddItemToJob" asp-route-itemId="@item.Id" asp-route-jobId="@Model.JobId" class="btn btn-primary">Add to Order</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <form method="post" asp-page-handler="RedirectToReview">
+        <input type="hidden" name="jobId" value="@Model.JobId" />
+        <button type="submit" class="btn btn-primary">Proceed to review</button>
+    </form>
+
+}

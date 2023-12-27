@@ -25,9 +25,16 @@ namespace WebApp.Pages.Items
         {
             if (_context.Items != null)
             {
+                if (TempData["Updated"] != null)
+                {
+                    _context.Items.AsNoTracking().Load();
+                    TempData["Updated"] = null; // Reset the flag
+                }
+
                 Item = await _context.Items
-                .Include(i => i.Category)
-                .Include(i => i.Location).ToListAsync();
+                    .Include(i => i.Category)
+                    .Include(i => i.Location)
+                    .ToListAsync();
             }
         }
     }

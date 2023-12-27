@@ -2,45 +2,30 @@
 @model WebApp.Pages.Jobs.CreateModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Job";
 }
 
-<h1>Create</h1>
+<h1>Create Job</h1>
 
-<h4>Job</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Job.TotalPrice" class="control-label"></label>
-                <input asp-for="Job.TotalPrice" class="form-control" />
-                <span asp-validation-for="Job.TotalPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Job.RallyId" class="control-label"></label>
-                <select asp-for="Job.RallyId" class ="form-control" asp-items="ViewBag.RallyId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Job.StartTime" class="control-label"></label>
-                <input asp-for="Job.StartTime" class="form-control" />
-                <span asp-validation-for="Job.StartTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Job.EndTime" class="control-label"></label>
-                <input asp-for="Job.EndTime" class="form-control" />
-                <span asp-validation-for="Job.EndTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+@if (Model.HasActiveRally)
+{
+    <form method="post">
+        <div class="form-group">
+            <label for="clientName">Please enter your name</label>
+            <input type="text" class="form-control" id="clientName" name="ClientName" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+}
+else
+{
+    <div class="alert alert-warning">
+        Sorry, there is no active rally now, which means we're currently closed. Please come back later.
     </div>
-</div>
+}
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="/Shared/Index">Go back</a>
 </div>
 
 @section Scripts {

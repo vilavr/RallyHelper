@@ -12,6 +12,10 @@ public class Item
     public int Id { get; set; }
 
     [Required]
+    [MaxLength(100)] // Adjust the maximum length as needed
+    public string ItemName { get; set; }
+    
+    [Required]
     public int CategoryId { get; set; }
 
     [Required]

@@ -14,6 +14,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Item[0].ItemName)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Item[0].CurrentQuantity)
             </th>
             <th>
@@ -35,6 +38,9 @@
 @foreach (var item in Model.Item) {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.ItemName)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.CurrentQuantity)
             </td>
             <td>
@@ -50,9 +56,7 @@
                 @Html.DisplayFor(modelItem => item.Location.LocationName)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Update Quantity</a> 
             </td>
         </tr>
 }

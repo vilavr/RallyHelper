@@ -1,0 +1,50 @@
+@page "{jobId:int}"
+@model WebApp.Pages.Jobs.ReviewOrder
+
+@{
+    ViewData["Title"] = "Review Order";
+}
+
+<h2>Review Order</h2>
+
+@if (Model.JobItems != null && Model.JobItems.Count > 0)
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Item Name</th>
+            <th>Quantity</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.JobItems)
+        {
+            <tr>
+                <td>@item.Item.ItemName</td>
+                <td>@item.NeededQuantity</td>
+                <td>
+                    <form method="post" asp-page-handler="Delete" asp-route-itemId="@item.ItemId">
+                        <input type="hidden" asp-for="JobId" />
+                        <button type="submit" class="btn btn-danger">Delete from Order</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    
+    <p>Total Price: @Model.TotalPrice.ToString("C")</p>
+
+    <form method="post" asp-page-handler="PlaceOrder">
+        <input type="hidden" asp-for="JobId" />
+        <button type="submit" class="btn btn-success">Place Order</button>
+    </form>
+
+}
+else
+{
+    <p>No items in the order.</p>
+}
+
+<a asp-page="/Jobs/AddJobComponents" asp-route-jobId="@Model.JobId" class="btn btn-primary">Add More Items</a>

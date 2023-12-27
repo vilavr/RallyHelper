@@ -1,0 +1,23 @@
+@page "{itemId:int}/{jobId:int}"
+@model WebApp.Pages.Jobs.AddItemToJobModel
+
+@{
+    ViewData["Title"] = "Add Item to Job";
+}
+
+<h2>Add Item to Job</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="ItemId" />
+    <input type="hidden" asp-for="JobId" />
+    <div class="form-group">
+        <label for="quantity">Quantity</label>
+        <select asp-for="Quantity" class="form-control">
+            @for (int i = 1; i <= Model.MaxAvailableQuantity; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Add to Job</button>
+</form>

@@ -1,79 +1,69 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DAL;
-using Domain;
 
-namespace WebApp.Pages.Items
+public class EditModel : PageModel
 {
-    public class EditModel : PageModel
+    private readonly DAL.AppDbContext _context;
+
+    public EditModel(DAL.AppDbContext context)
     {
-        private readonly DAL.AppDbContext _context;
+        _context = context;
+    }
 
-        public EditModel(DAL.AppDbContext context)
+    [BindProperty]
+    public Item Item { get; set; } = default!;
+
+    public async Task<IActionResult> OnGetAsync(int? id)
+    {
+        if (id == null || _context.Items == null)
         {
-            _context = context;
+            return NotFound();
         }
 
-        [BindProperty]
-        public Item Item { get; set; } = default!;
-
-        public async Task<IActionResult> OnGetAsync(int? id)
+        var item = await _context.Items.FirstOrDefaultAsync(m => m.Id == id);
+        if (item == null)
         {
-            if (id == null || _context.Items == null)
+            return NotFound();
+        }
+        Item = item;
+        return Page();
+    }
+
+    public async Task<IActionResult> OnPostAsync()
+    {
+
+        var itemToUpdate = await _context.Items.FirstOrDefaultAsync(i => i.Id == Item.Id);
+        if (itemToUpdate == null)
+        {
+            return NotFound();
+        }
+
+        itemToUpdate.CurrentQuantity = Item.CurrentQuantity; // Update only the CurrentQuantity
+
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!ItemExists(Item.Id))
             {
                 return NotFound();
             }
-
-            var item =  await _context.Items.FirstOrDefaultAsync(m => m.Id == id);
-            if (item == null)
+            else
             {
-                return NotFound();
+                throw;
             }
-            Item = item;
-           ViewData["CategoryId"] = new SelectList(_context.ItemCategories, "Id", "CategoryName");
-           ViewData["LocationId"] = new SelectList(_context.ItemLocations, "Id", "LocationName");
-            return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+        TempData["Updated"] = true;
+        return RedirectToPage("./Index", new { update = DateTime.Now.Ticks });
+    }
 
-            _context.Attach(Item).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ItemExists(Item.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return RedirectToPage("./Index");
-        }
-
-        private bool ItemExists(int id)
-        {
-          return (_context.Items?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
+    private bool ItemExists(int id)
+    {
+        return (_context.Items?.Any(e => e.Id == id)).GetValueOrDefault();
     }
 }

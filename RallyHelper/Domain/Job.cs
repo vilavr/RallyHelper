@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,18 +11,13 @@ public class Job
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
-    [Required]
-    [DefaultValue(0)]
-    public decimal TotalPrice { get; set; } = 0;
+    public decimal? TotalPrice { get; set; }
+    public int? RallyId { get; set; }
+    public DateTime? StartTime { get; set; }
+    public DateTime? EndTime { get; set; }
 
     [Required]
-    public int RallyId { get; set; }
-
-    [Required]
-    public DateTime StartTime { get; set; }
-
-    [Required]
-    public DateTime EndTime { get; set; }
+    public string ClientName { get; set; }
 
     // Navigation properties
     public virtual ICollection<JobItem> JobItems { get; set; }

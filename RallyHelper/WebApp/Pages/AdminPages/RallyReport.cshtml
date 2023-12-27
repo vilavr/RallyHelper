@@ -1,0 +1,46 @@
+@page
+@model WebApp.Pages.AdminPages.RallyReport
+
+@{
+    ViewData["Title"] = "Rally Report";
+}
+
+<h2>Rally Report</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label for="SelectedRallyId">Select Rally</label>
+        <select asp-for="SelectedRallyId" asp-items="@(new SelectList(Model.Rallies, "Id", "Id"))" class="form-control"></select>
+    </div>
+    <button type="submit" class="btn btn-primary">Show Report</button>
+</form>
+
+@if (Model.Jobs != null)
+{
+    <h3>Total Price of Jobs: @Model.TotalPrice.ToString("C")</h3>
+    @foreach (var job in Model.Jobs)
+    {
+        <h4>Job for Client: @job.ClientName (Total Price: @job.TotalPrice.ToString())</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Quantity</th>
+                    <th>Category</th>
+                    <th>Location</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in job.JobItems)
+            {
+                <tr>
+                    <td>@item.Item.ItemName</td>
+                    <td>@item.NeededQuantity</td>
+                    <td>@item.Item.Category.CategoryName</td>
+                    <td>@item.Item.Location.LocationName</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+}

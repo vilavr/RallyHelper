@@ -1,0 +1,42 @@
+@page
+@model WebApp.Pages.AdminPages.RallyManagement
+
+@{
+    ViewData["Title"] = "Rally Management";
+}
+
+<div class="container">
+    <h2>Rally Management</h2>
+
+    <p>
+        Active Rally: @(Model.CurrentOrLastRally?.EndTime == null ? "Yes" : "No")
+    </p>
+
+    @if (Model.CurrentOrLastRally != null)
+    {
+
+        <h4>Item Usage:</h4>
+        @foreach (var item in Model.ItemUsage)
+        {
+            <p>@item.Key: @item.Value</p>
+        }
+
+        <h4>Items to Restock:</h4>
+        @foreach (var item in Model.ItemsToRestock)
+        {
+            <p>@item.Key: @item.Value</p>
+        }
+    }
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info">
+            @TempData["Message"]
+        </div>
+    }
+
+    <form method="post">
+        <button type="submit" class="btn btn-danger" asp-page-handler="EndCurrentRally">End Current Rally</button>
+        <button type="submit" class="btn btn-success" asp-page-handler="StartNewRally">Start New Rally</button>
+    </form>
+</div>
